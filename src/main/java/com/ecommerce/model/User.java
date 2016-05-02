@@ -14,6 +14,7 @@ public class User implements Serializable{
 	private String email; 
 	private String password;
 	private Long id;
+	private Tenant tenant;
 	
 	public String getName() {
 		return name;
@@ -50,6 +51,12 @@ public class User implements Serializable{
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public Tenant getTenant() {
+		return tenant;
+	}
+	public void setTenant(Tenant tenant) {
+		this.tenant = tenant;
 	}
 	
 	

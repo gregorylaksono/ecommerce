@@ -3,9 +3,34 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
+   <class name="com.ecommerce.model.Tenant" table="tenant">
+        <id name="id" type="java.lang.Long">
+            <column name="tenant_id" />
+            <generator class="identity" />
+        </id>
+        <property name="name" type="string">
+        	<column name="name"  />
+        </property>
+        
+        <property name="status" type="string">
+        	<column name="status" />
+        </property>
+
+        <property name="email" type="string">
+        	<column name="email" />
+        </property>
+
+        <property name="password" type="string">
+        	<column name="password" />
+        </property>
+        
+		<many-to-one name="admin" class="com.ecommerce.model.User" column="admin_id"/>
+    
+    </class>
+    
     <class name="com.ecommerce.model.User" table="user">
         <id name="id" type="java.lang.Long">
-            <column name="id" />
+            <column name="user_id" />
             <generator class="identity" />
         </id>
         <property name="name" type="string">
@@ -27,6 +52,85 @@
         <property name="password" type="string">
         	<column name="password" />
         </property>
+        
+		<many-to-one name="tenant" class="com.ecommerce.model.Tenant" column="tenant_id"/>
     
     </class>
+    
+	<class name="com.ecommerce.model.Category" table="category">
+        
+        <id name="id" type="java.lang.Long">
+            <column name="category_id" />
+            <generator class="identity" />
+        </id>    
+        <property name="name" type="string">
+        	<column name="name"  />
+        </property>
+		<many-to-one name="tenant" class="com.ecommerce.model.Tenant" column="tenant_id"/>
+    
+    </class>
+	
+	<class name="com.ecommerce.model.Item" table="item">
+        
+        <id name="id" type="java.lang.Long">
+            <column name="item_id" />
+            <generator class="identity" />
+        </id>    
+        <property name="name" type="string">
+        	<column name="name"  />
+        </property>
+        
+		<property name="price" type="java.lang.Double">
+        	<column name="price"  />
+        </property>
+        
+        <property name="description" type="string">
+        	<column name="description"  />
+        </property>        
+
+		<property name="quantity" type="java.lang.Integer">
+        	<column name="quantity"  />
+        </property>
+        
+		<property name="imgUrl" type="string">
+        	<column name="imgUrl"  />
+        </property>
+                
+        <set name="category" table="item_category"  inverse="false" lazy="true" fetch="select" cascade="all" >
+            <key>
+                <column name="item_id" not-null="true" />
+            </key>
+            
+            <many-to-many entity-name="com.ecommerce.model.Category">
+                <column name="category_id" not-null="true" />
+            </many-to-many>
+        </set>
+                    
+		<many-to-one name="tenant" class="com.ecommerce.model.Tenant" column="tenant_id"/>
+    
+    </class>    
+    
+	<class name="com.ecommerce.model.Transaction" table="transaction">
+        
+        <id name="id" type="java.lang.Long">
+            <column name="transaction_id" />
+            <generator class="identity" />
+        </id>
+        
+        <property name="quantity" type="java.lang.Integer">
+        	<column name="quantity"  />
+        </property>
+        
+        <property name="status" type="java.lang.Integer">
+        	<column name="status" />
+        </property>        
+        
+        <property name="trxDate" type="java.util.Date">
+        	<column name="trxDate"  />
+        </property>        
+        
+		<many-to-one name="item" class="com.ecommerce.model.Item" column="item_id"/>
+    
+    </class>    
+    
 </hibernate-mapping>

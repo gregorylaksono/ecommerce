@@ -10,10 +10,12 @@ public class Transaction implements Serializable {
 	 */
 	private static final long serialVersionUID = -3330684324129486371L;
 	
+	private Long id;
 	private Item item;
 	private Date trxDate;
 	private int quantity;
 	private int status;
+	
 	public static int STATUS_SUCCESS = 1;
 	public static int STATUS_CANCEL = 2;
 	
@@ -40,6 +42,12 @@ public class Transaction implements Serializable {
 	}
 	public void setStatus(int status) {
 		this.status = status;
+	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	

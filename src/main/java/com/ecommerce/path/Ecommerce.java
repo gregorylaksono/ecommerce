@@ -18,32 +18,40 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.ecommerce.config.SpringUtil;
+import com.ecommerce.model.Category;
 import com.ecommerce.model.Session;
+import com.ecommerce.model.Tenant;
 import com.ecommerce.model.User;
 
 @Component
 @Path("/services")
 public class Ecommerce {
-	
 
 	@Context
 	ServletContext servletContext;
 	
-//	public void initBO(){
-//		if(bo == null){
-//			WebApplicationContext ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
-//			bo = (HombreBo) ctx.getBean("stockBo");
-//		}
-//	}
+	private String generateSessionId(String prefix){
+		String value = "";
+		double dValue = Math.random();
+		String capture = String.valueOf(dValue);
+		int startIndex = capture.indexOf(".") + 1;
+		String processed = capture.substring(startIndex, capture.length());
+		value = prefix+processed;
+		
+		return value;
+	}
 	
 	@POST
 	@Path("/getUser")
 	@Produces("application/json")
-	public Response getUser(@FormParam(value = "userid") String userid,
-							@FormParam(value = "tenant") String tenantId){
+	public Response getUser(@FormParam(value = "sessionId") String sessionId,
+							@FormParam(value = "userid") String userid){
+		Object obj = servletContext.getAttribute(sessionId);
+		if(obj == null){
+			return Response.status(Status.FORBIDDEN).build();
+		}
 		Long id = Long.parseLong(userid);
-		Long tenant = Long.parseLong(tenantId);
-		User user  = SpringUtil.getUserService(servletContext).getUserById(tenant, id);
+		User user  = SpringUtil.getUserService(servletContext).getUserById(id);
 		return Response.status(Status.OK).entity(user).build();
 	}
 	
@@ -52,9 +60,43 @@ public class Ecommerce {
 	@Produces("application/json")
 	public Response login(@FormParam(value = "username") String username, 
 						  @FormParam(value = "password") String password){
-		Session session  = SpringUtil.getUserService(servletContext).getUserByUsernameAndPassword(username, username);
-		servletContext.setAttribute(session.getSessionId(), session.getUser());
+		Session session  = SpringUtil.getUserService(servletContext).getUserByUsernameAndPassword(username, password);
+		String sessionId = generateSessionId(session.getUser().getLastname());
+		Object ob = null;
+		while(ob == null){
+			sessionId = generateSessionId(session.getUser().getLastname());
+			ob = servletContext.getAttribute(sessionId);
+		}
+		servletContext.setAttribute(sessionId, session);
 		return Response.status(Status.OK).entity(session).build();
+	}
+	
+	@POST
+	@Path("/forgetpassword")
+	@Produces("application/json")
+	public Response forgetpassword(@FormParam(value = "email") String email){
+		boolean value = SpringUtil.getUserService(servletContext).forgetPassword(email);
+		return Response.status(Status.OK).entity(value).build();
+	}
+	
+	@POST
+	@Path("/insertcategory")
+	@Produces("application/json")
+	public Response insertCategory(@FormParam(value = "sessionId") String sessionId,
+								   @FormParam(value = "categoryName") String categoryName){
+		Object obj = servletContext.getAttribute(sessionId);
+		if(obj == null){
+			return Response.status(Status.FORBIDDEN).build();
+		}else{
+			Session session = (Session) obj;
+			Tenant tenant  = session.getUser().getTenant();
+			Category cat = new Category();
+			cat.setName(categoryName);;
+			cat.setTenant(tenant);
+			SpringUtil.getItemService(servletContext).insertCategory(cat);
+			return Response.status(Status.OK).build();
+		}
+		
 	}
 	
 	

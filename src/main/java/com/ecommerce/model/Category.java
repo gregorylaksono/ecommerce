@@ -11,7 +11,9 @@ public class Category implements Serializable{
 
 
 	private String name;
+	private Tenant tenant;
 	private Long id;
+	
 	public String getName() {
 		return name;
 	}
@@ -23,6 +25,12 @@ public class Category implements Serializable{
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public Tenant getTenant() {
+		return tenant;
+	}
+	public void setTenant(Tenant tenant) {
+		this.tenant = tenant;
 	}
 	
 	

@@ -1,5 +1,7 @@
 package com.ecommerce.model;
 import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
 
 import com.ecommerce.model.Category;
 
@@ -16,7 +18,9 @@ public class Item implements Serializable{
 	private String description;
 	private int quantity;
 	private String imgUrl;
-	private Category category;
+	private Set<Category> category;
+	private Tenant tenant;
+	
 	
 	public Long getId() {
 		return id;
@@ -54,12 +58,20 @@ public class Item implements Serializable{
 	public void setImgUrl(String imgUrl) {
 		this.imgUrl = imgUrl;
 	}
-	public Category getCategory() {
+	public Set<Category> getCategory() {
 		return category;
 	}
-	public void setCategory(Category category) {
+	public void setCategory(Set<Category> category) {
 		this.category = category;
 	}
+	public Tenant getTenant() {
+		return tenant;
+	}
+	public void setTenant(Tenant tenant) {
+		this.tenant = tenant;
+	}
+
+
 	
 	
 }

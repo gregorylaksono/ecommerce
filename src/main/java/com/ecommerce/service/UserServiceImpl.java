@@ -2,6 +2,7 @@ package com.ecommerce.service;
 
 import com.ecommerce.hibernate.IUserDao;
 import com.ecommerce.model.Session;
+import com.ecommerce.model.Tenant;
 import com.ecommerce.model.User;
 
 public class UserServiceImpl implements IUserService{
@@ -45,8 +46,19 @@ public class UserServiceImpl implements IUserService{
 	}
 
 	@Override
-	public User getUserById(Long tenantId, Long id) {
-		return userDao.getUserById(tenantId, id);
+	public User getUserById(Long id) {
+		return userDao.getUserById(id);
+	}
+
+	@Override
+	public boolean forgetPassword(String email) {
+		User user  = userDao.getUserByMail(email);
+		if(user != null){
+			return true;
+		}
+		else{
+			return false;			
+		}
 	}
 	
 	
