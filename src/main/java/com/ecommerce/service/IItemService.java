@@ -10,7 +10,7 @@ public interface IItemService {
 	public void updateCategory(Category category);
 	
 	public Item getItemById(Long id);
-	public int insertItem(Item item);
+	public void insertItem(Item item);
 	public void updateItem(Item item);
 	public void deleteItem(Item item);
 }

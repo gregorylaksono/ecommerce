@@ -4,19 +4,23 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
    <bean id="itemService" class="com.ecommerce.service.ItemServiceImpl" >
-   		<property name="userDao" ref="userDao" />
+   		<property name="itemCategoryDao" ref="itemDao" />
    </bean>
 
    <bean id="userService" class="com.ecommerce.service.UserServiceImpl" >
    		<property name="userDao" ref="userDao" />
    </bean>
  
+   <bean id="itemDao" class="com.ecommerce.hibernate.ItemCategoryDaoImpl" >
+   		<property name="sessionFactory" ref="sessionFactory"></property>
+   </bean>
+   
    <bean id="userDao" class="com.ecommerce.hibernate.UserDaoImpl" >
    		<property name="sessionFactory" ref="sessionFactory"></property>
    </bean>
    
-   <bean id="itemDao" class="com.ecommerce.hibernate.UserDaoImpl" >
+      <bean id="trxDao" class="com.ecommerce.hibernate.TransactionDaoImpl" >
    		<property name="sessionFactory" ref="sessionFactory"></property>
-   </bean>   
+   </bean>    
    
 </beans>

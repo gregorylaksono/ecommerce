@@ -12,6 +12,7 @@ public class Tenant implements Serializable {
 	private String name;
 	private User admin;
 	private String status;
+	private String email;
 	
 	public Long getTenantId() {
 		return tenantId;
@@ -37,5 +38,12 @@ public class Tenant implements Serializable {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
 	
 }

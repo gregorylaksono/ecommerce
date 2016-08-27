@@ -10,4 +10,5 @@ public interface ITransactionService {
 	public List<Transaction> getTransactionByDate(Date date);
 	public void insertTransaction(Transaction trx);
 	public void updateTransaction(Transaction trx);
+	public void editTransaction();
 }

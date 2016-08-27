@@ -4,7 +4,7 @@
 
 <hibernate-mapping>
    <class name="com.ecommerce.model.Tenant" table="tenant">
-        <id name="id" type="java.lang.Long">
+        <id name="tenantId" type="java.lang.Long">
             <column name="tenant_id" />
             <generator class="identity" />
         </id>
@@ -18,10 +18,6 @@
 
         <property name="email" type="string">
         	<column name="email" />
-        </property>
-
-        <property name="password" type="string">
-        	<column name="password" />
         </property>
         
 		<many-to-one name="admin" class="com.ecommerce.model.User" column="admin_id"/>

@@ -1,5 +1,7 @@
 package com.ecommerce.path;
 
+import java.util.List;
+
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -21,6 +23,7 @@ import com.ecommerce.config.SpringUtil;
 import com.ecommerce.model.Category;
 import com.ecommerce.model.Session;
 import com.ecommerce.model.Tenant;
+import com.ecommerce.model.Transaction;
 import com.ecommerce.model.User;
 
 @Component
@@ -39,6 +42,24 @@ public class Ecommerce {
 		value = prefix+processed;
 		
 		return value;
+	}
+	
+	@GET
+	@Path("/testme")
+	@Produces("application/json")
+	public Response testMe(){
+		List<Transaction> trxs= SpringUtil.getTransactionService(servletContext).getTransactionByDate(null);
+		return Response.status(Status.OK).entity(trxs).build();
+	}
+	
+	@POST
+	@Path("/test")
+	@Produces("application/json")
+	public Response test(@FormParam(value = "sessionId") String sessionId){
+		Category cat = new Category();
+		cat.setId(new Long(5));
+		cat.setName("Test");
+		return Response.status(Status.OK).entity(cat).build();
 	}
 	
 	@POST
@@ -99,5 +120,41 @@ public class Ecommerce {
 		
 	}
 	
+	@POST
+	@Path("/deleteCategory")
+	@Produces("application/json")
+	public Response deleteCategory(@FormParam(value = "sessionId") String sessionId,
+								   @FormParam(value = "categoryName") String catId){
+		Object obj = servletContext.getAttribute(sessionId);
+		if(obj == null){
+			return Response.status(Status.FORBIDDEN).build();
+		}else{
+			Long id = Long.parseLong(catId);
+			Category category = SpringUtil.getItemService(servletContext).getCategoryById(id);
+			SpringUtil.getItemService(servletContext).deleteCategory(category);
+			
+			return Response.status(Status.OK).build();
+		}
+		
+	}
+	
+	@POST
+	@Path("/updateCategory")
+	@Produces("application/json")
+	public Response updateCategory(@FormParam(value = "sessionId") String sessionId,
+								   @FormParam(value = "categoryName") String catId,
+								   @FormParam(value = "categoryName") String categoryName){
+		Object obj = servletContext.getAttribute(sessionId);
+		if(obj == null){
+			return Response.status(Status.FORBIDDEN).build();
+		}else{
+			Long id = Long.parseLong(catId);
+			Category category = SpringUtil.getItemService(servletContext).getCategoryById(id);
+			category.setName(categoryName);
+			SpringUtil.getItemService(servletContext).updateCategory(category);
+			return Response.status(Status.OK).build();
+		}
+		
+	}
 	
 }

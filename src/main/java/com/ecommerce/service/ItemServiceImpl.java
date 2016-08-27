@@ -32,25 +32,33 @@ public class ItemServiceImpl implements IItemService {
 	@Override
 	public Item getItemById(Long id) {
 	
-		return null;
+		return itemCategoryDao.getItemById(id);
 	}
 
 	@Override
-	public int insertItem(Item item) {
-	
-		return 0;
+	public void insertItem(Item item) {
+		 itemCategoryDao.saveItem(item);
 	}
 
 	@Override
 	public void updateItem(Item item) {
-	
-
+		itemCategoryDao.updateItem(item);
 	}
 
 	@Override
 	public void deleteItem(Item item) {
-	
+		itemCategoryDao.deleteItem(item);
 
 	}
+
+	public IItemCategoryDao getItemCategoryDao() {
+		return itemCategoryDao;
+	}
+
+	public void setItemCategoryDao(IItemCategoryDao itemCategoryDao) {
+		this.itemCategoryDao = itemCategoryDao;
+	}
+	
+	
 
 }
